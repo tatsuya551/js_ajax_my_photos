@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Photos</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+  <header>
+    <h1>My Photos</h1>
+  </header>
+
+  <div class="container">
+    <div id="img_unit">
+    </div>
+  </div>
+
+  <script>
+    // ajax.readyState === 0(UNSENT) インスタンスができた時
+    var ajax = new XMLHttpRequest();
+
+    // ajax.readyState === 1(OPENED) openメソッドを利用した時
+    ajax.open('GET', 'https://h2o-space.com/htmlbook/images.php');
+    ajax.responseType = 'json';
+
+    // ajax.readyState === 2(HEADERS_RECEIVED) ヘッダーが受信できた時
+    // ajax.readyState === 3(LODING) データを送信中の時
+    // ajax.readyState === 4(DONE) 通信が終了した時
+    ajax.send(null);
+
+    ajax.onreadystatechange = function () {
+      if (ajax.readyState === XMLHttpRequest.DONE && ajax.status === 200) {
+        for (var i = 0; i < this.response.length; i++) {
+          var data = this.response[i];
+
+          var img;
+          img = document.createElement('img')
+          img.setAttribute('src', data.path);
+
+          var caption;
+          caption = document.createElement('div');
+          caption.className = 'inner';
+          caption.innerHTML = '<p>' + data.caption + '<span>' + data.name + '</span></p>';
+
+          var div;
+          div = document.createElement('div');
+          div.className = 'photo';
+          div.appendChild(img);
+          div.appendChild(caption);
+
+          document.getElementById('img_unit').appendChild(div)
+        }
+      }
+    };
+  </script>
+</body>
+
+</html>
